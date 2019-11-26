@@ -105,19 +105,19 @@ void nt7534_init(void)
 
     LV_DRV_DISP_SPI_CS(0);
 
-    nt7534_command(0xe2);
-    nt7534_command(0xa2);
-    nt7534_command(0xa0);
-    nt7534_command(0xc0);
-    nt7534_command(0x40);
-    nt7534_command(0x28|0x4);
-    nt7534_command(0x28|0x6);
-    nt7534_command(0x28|0x7);
-    nt7534_command(0x10);
-    nt7534_command(0xa7);
-    nt7534_command(0x81);
+    nt7534_command(CMD_INTERNAL_RESET);
+    nt7534_command(CMD_SET_BIAS_9);
+    nt7534_command(CMD_SET_ADC_NORMAL);
+    nt7534_command(CMD_SET_COM_NORMAL);
+    nt7534_command(CMD_SET_DISP_START_LINE);
+    nt7534_command(CMD_SET_POWER_CONTROL | 0x4);
+    nt7534_command(CMD_SET_POWER_CONTROL | 0x6);
+    nt7534_command(CMD_SET_POWER_CONTROL | 0x7);
+    nt7534_command(CMD_SET_COLUMN_UPPER);
+    nt7534_command(CMD_SET_DISP_REVERSE);
+    nt7534_command(CMD_SET_VOLUME_FIRST);
     nt7534_command(0x1e);
-    nt7534_command(0xaf);
+    nt7534_command(CMD_DISPLAY_ON);
 
     /*nt7534_command(CMD_SET_BIAS_7);
     nt7534_command(CMD_SET_ADC_NORMAL);
@@ -167,7 +167,6 @@ void nt7534_rounder(struct _disp_drv_t * disp_drv, lv_area_t *a)
 
 void nt7534_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color_t * color_p)
 {
-    printf("Flushing area\n");
     /*Return if the area is out the screen*/
     if(area->x2 < 0) return;
     if(area->y2 < 0) return;
@@ -231,8 +230,6 @@ void nt7534_fill(int32_t x1, int32_t y1, int32_t x2, int32_t y2, lv_color_t colo
  */
 static void nt7534_sync(uint8_t *data, lv_coord_t x1, lv_coord_t y1, lv_coord_t x2, lv_coord_t y2)
 {
-    printf("Syncing area\n");
-
     LV_DRV_DISP_SPI_CS(0);
 
     uint8_t c, p;
